@@ -1,7 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter_yes_no_app/domain/entities/message.dart';
 
 class HerMessageBubble extends StatelessWidget {
-  const HerMessageBubble({super.key});
+  const HerMessageBubble({super.key, required this.message});
+
+  final Message message;
 
   @override
   Widget build(BuildContext context) {
@@ -12,22 +17,21 @@ class HerMessageBubble extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: colors.secondary, borderRadius: BorderRadius.circular(20)
-          ),
-          child: const Padding(
+              color: colors.secondary, borderRadius: BorderRadius.circular(20)),
+          child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
-              'Hola mundo',
-              style: TextStyle(color: Colors.white),
+              message.text,
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         ),
         const SizedBox(
-          height: 10,
+          height: 5,
         ),
-        const _ImageBubble(),
+        _ImageBubble(message.imageUrl!),
         const SizedBox(
-          height: 10,
+          height: 5,
         )
       ],
     );
@@ -35,22 +39,23 @@ class HerMessageBubble extends StatelessWidget {
 }
 
 class _ImageBubble extends StatelessWidget {
-  const _ImageBubble();
+  const _ImageBubble(this.imageUrl);
+
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Image.network(
-        'https://yesno.wtf/assets/yes/13-c3082a998e7758be8e582276f35d1336.gif',
+        imageUrl,
         width: size.width * 0.5,
         height: 150,
         fit: BoxFit.cover,
         loadingBuilder: (context, child, loadingProgress) {
-          if(loadingProgress == null) return child;
+          if (loadingProgress == null) return child;
           return Container(
             width: size.width * 0.5,
             height: 150,
